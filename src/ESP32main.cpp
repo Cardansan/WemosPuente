@@ -100,22 +100,22 @@ void loop(){
             client.println(".button2 {background-color: #555555;}</style></head>");
 
             // Web Page Heading
-            client.println("<body><h1>ESP32 Web Server</h1>");
+            client.println("<body><h1>Configuración de Red Display Industria 4.0</h1>");
 
             // Display current state, and ON/OFF buttons for GPIO 26
-            client.println("<p>GPIO 26 - State " + output26State + "</p>");
+            client.println("<p>SSID (Nombre de la red) " + output26State + "</p>");
             // If the output26State is off, it displays the ON button
             if (output26State=="off") {
-              client.println("<p><a href=\"/26/on\"><button class=\"button\">ON</button></a></p>");
+              client.println("<p><a href=\"/26/on\"><button class=\"button\">SSID</button></a></p>");
             } else {
               client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
             }
 
             // Display current state, and ON/OFF buttons for GPIO 27
-            client.println("<p>GPIO 27 - State " + output27State + "</p>");
+            client.println("<p>Password" + output27State + "</p>");
             // If the output27State is off, it displays the ON button
             if (output27State=="off") {
-              client.println("<p><a href=\"/27/on\"><button class=\"button\">ON</button></a></p>");
+              client.println("<p><a href=\"/27/on\"><button class=\"button\">pswd</button></a></p>");
             } else {
               client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
             }
