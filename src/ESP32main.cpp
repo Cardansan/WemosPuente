@@ -51,12 +51,10 @@ void loop(){
   WiFiClient client = server.available();   // Listen for incoming clients
 
   if (client) {                             // If a new client connects,
-    Serial.println("New Client.");          // print a message out in the serial port
     String currentLine = "";                // make a String to hold incoming data from the client
     while (client.connected()) {            // loop while the client's connected
       if (client.available()) {             // if there's bytes to read from the client,
         char c = client.read();             // read a byte, then
-        Serial.write(c);                    // print it out the serial monitor
         header += c;
         if (c == '\n') {                    // if the byte is a newline character
           // if the current line is blank, you got two newline characters in a row.
@@ -69,23 +67,14 @@ void loop(){
             client.println("Connection: close");
             client.println();
 
-            // turns the GPIOs on and off
+            // Conecta a la red.
             if (header.indexOf("GET /26/on") >= 0) {
-              Serial.println("GPIO 26 on");
+              Serial.print("La red es: ");
+              Serial.println(client.println("<id=ssid>"));
               output26State = "on";
-              digitalWrite(output26, HIGH);
+
             } else if (header.indexOf("GET /26/off") >= 0) {
-              Serial.println("GPIO 26 off");
               output26State = "off";
-              digitalWrite(output26, LOW);
-            } else if (header.indexOf("GET /27/on") >= 0) {
-              Serial.println("GPIO 27 on");
-              output27State = "on";
-              digitalWrite(output27, HIGH);
-            } else if (header.indexOf("GET /27/off") >= 0) {
-              Serial.println("GPIO 27 off");
-              output27State = "off";
-              digitalWrite(output27, LOW);
             }
 
             // Display the HTML web page
@@ -100,26 +89,23 @@ void loop(){
             client.println(".button2 {background-color: #555555;}</style></head>");
 
             // Web Page Heading
-            client.println("<body><h1>Configuración de Red Display Industria 4.0</h1>");
+            client.println("<body><h1>Setup de Red Display Industria 4.0</h1>");
 
-            // Display current state, and ON/OFF buttons for GPIO 26
-            client.println("<p>SSID (Nombre de la red) " + output26State + "</p>");
+            client.println("<p>SSID (Nombre de la red) </p>");
+            client.println("<p><input type=\"text\"  name=\"ssid\" id=\"ssid\"  /></p>");
+
+            client.println("<p>Password</p>");
+            client.println("<p><input type=\"text\" value=\" \" id=\"pswd\" /> </p>");
+
             // If the output26State is off, it displays the ON button
             if (output26State=="off") {
-              client.println("<p><a href=\"/26/on\"><button class=\"button\">SSID</button></a></p>");
+              client.println("<p><a href=\"/26/on\"><button class=\"button\">CONECTAR</button></a></p>");
             } else {
-              client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
+              client.println("<p><a href=\"/26/off\"><button class=\"button button2\">CONECTANDO</button></a></p>");
             }
 
-            // Display current state, and ON/OFF buttons for GPIO 27
-            client.println("<p>Password" + output27State + "</p>");
-            // If the output27State is off, it displays the ON button
-            if (output27State=="off") {
-              client.println("<p><a href=\"/27/on\"><button class=\"button\">pswd</button></a></p>");
-            } else {
-              client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
-            }
             client.println("</body></html>");
+
 
             // The HTTP response ends with another blank line
             client.println();
@@ -135,9 +121,10 @@ void loop(){
     }
     // Clear the header variable
     header = "";
-    // Close the connection
     client.stop();
-    Serial.println("Client disconnected.");
     Serial.println("");
   }
+  Serial.println("!password");
+  Serial.println("#ssid");
+  delay(3000);
 }
