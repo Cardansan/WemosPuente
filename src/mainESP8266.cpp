@@ -1,21 +1,4 @@
 
-
-//https://github.com/acrobotic/Ai_Tips_ESP8266/blob/master/webserver_websockets/webserver_websockets.ino
-
-/*------------------------------------------------------------------------------
-  07/01/2018
-  Author: Makerbro
-  Platforms: ESP8266
-  Language: C++/Arduino
-  File: webserver_html.ino
-  ------------------------------------------------------------------------------
-  Description:
-  Code for YouTube video demonstrating how to transfer data between a web server
-  and a web client in real-time using websockets.
-  https://youtu.be/ROeT-gyYZfw
-  ------------------------------------------------------------------------------
- */
-
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
@@ -193,7 +176,6 @@ void setup()
   {
     // send index.html
     server.send_P(200, "text/html", webpage);
-
   });
 
   server.begin();
@@ -203,6 +185,7 @@ void setup()
   // Add service to MDNS
   MDNS.addService("http", "tcp", 80);
   MDNS.addService("ws", "tcp", 81);
+  webSocket.broadcastTXT("\nDisplay Seguridad Industria 4.0");
 }
 
 //----------------------------------------------------------- loop
@@ -210,10 +193,5 @@ void loop()
 {
   webSocket.loop();
   server.handleClient();
-  if(Serial.available() > 0)
-  {
-    char c[] = {(char)Serial.read()};
-    //webSocket.broadcastTXT(c, sizeof(c));
-    webSocket.broadcastTXT("Display Seguridad Industria 4.0");
-  }
+
 }
