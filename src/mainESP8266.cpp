@@ -24,10 +24,6 @@
 ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-#define rele1  D0  //(D0)
-#define rele2  D1 // D1
-#define rele3  D2 // D3
-
 
 const char WiFiAPPSK[] = "12345678";  //CONTRASEÑA
 const char ssid[] = "ESP8266"; // NOMBRE DE LA RED
@@ -54,12 +50,12 @@ char webpage[] PROGMEM = R"=====(
 
     function sendTextSSID()
     {
-      Socket.send("#"+document.getElementById("txSSID").value);
+      Socket.send("SSID:"+document.getElementById("txSSID").value);
       document.getElementById("txSSID").value = "";
     }
     function sendTextPswd()
     {
-      Socket.send("!"+document.getElementById("txPswd").value);
+      Socket.send("PSWD:"+document.getElementById("txPswd").value);
       document.getElementById("txPswd").value = "";
     }
     function sendTextNum1()
@@ -83,7 +79,26 @@ char webpage[] PROGMEM = R"=====(
       document.getElementById("txCol2").value = "";
     }
 
-
+    function sendTextNum3()
+    {
+      Socket.send("!"+document.getElementById("txNum3").value);
+      document.getElementById("txNum3").value = "";
+    }
+    function sendTextCol3()
+    {
+      Socket.send("?"+document.getElementById("txCol3").value);
+      document.getElementById("txCol3").value = "";
+    }
+    function sendTextNum4()
+    {
+      Socket.send("."+document.getElementById("txNum4").value);
+      document.getElementById("txNum4").value = "";
+    }
+    function sendTextCol4()
+    {
+      Socket.send("_"+document.getElementById("txCol4").value);
+      document.getElementById("txCol4").value = "";
+    }
 
 </script>
 </head>
@@ -111,6 +126,19 @@ char webpage[] PROGMEM = R"=====(
     <br/>COLOR 2: <input type="text" id="txCol2" onkeydown="if(event.keyCode == 13) sendTextCol2();" />
   </div>
 
+  <div>
+    <br/>NUMERO 3: <input type="text" id="txNum3" onkeydown="if(event.keyCode == 13) sendTextNum3();" />
+  </div>
+  <div>
+    <br/>COLOR 3: <input type="text" id="txCol3" onkeydown="if(event.keyCode == 13) sendTextCol3();" />
+  </div>
+  <div>
+    <br/>NUMERO 4: <input type="text" id="txNum4" onkeydown="if(event.keyCode == 13) sendTextNum4();" />
+  </div>
+  <div>
+    <br/>COLOR 4: <input type="text" id="txCol4" onkeydown="if(event.keyCode == 13) sendTextCol4();" />
+  </div>
+
   <hr/>
 </body>
 </html>
@@ -131,23 +159,20 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     {
       case WStype_TEXT:
         for(int i = 0; i < length; i++) Serial.print((char) payload[i]);
-
       break;
 
       case WStype_DISCONNECTED:
-            Serial.printf("[%u] Disconnected!\n", num);
+            Serial.printf("[%u] Disconnected\n", num);
       break;
 
 
      case WStype_CONNECTED: {
             IPAddress ip = webSocket.remoteIP(num);
             Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
-
             // send message to client
-            webSocket.sendTXT(num, "Connected");
+            webSocket.sendTXT(num, "Setup Iniciado");
         }
       break;
-
     }
 }
 
@@ -156,21 +181,8 @@ void setup()
 {
   Serial.begin(115200);
   Serial.print("\nSetting up... ");
-
-  //Engine channels
-  pinMode(rele1, OUTPUT);
-  pinMode(rele2,OUTPUT);
-  pinMode(rele3,OUTPUT);
-  digitalWrite(rele1, HIGH);
-  digitalWrite(rele2,HIGH);
-  digitalWrite(rele3,HIGH);
-
-
-  delay(1000);//wait for a second
-
   setupWiFi();
-
-
+  delay(1000);//wait for a second
   if(MDNS.begin("esp8266"))
   {
     Serial.println("\nMDNS responder started");
@@ -185,7 +197,6 @@ void setup()
   });
 
   server.begin();
-  // start webSocket server
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
 
