@@ -141,6 +141,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     {
       case WStype_TEXT:
         for(int i = 0; i < length; i++) Serial.print((char) payload[i]);
+        Serial.println("");
       break;
 
       case WStype_DISCONNECTED:
