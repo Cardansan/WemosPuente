@@ -8,8 +8,8 @@ ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 
 
-const char WiFiAPPSK[] = "12345678";  //CONTRASEÑA
-const char ssid[] = "ESP8266"; // NOMBRE DE LA RED
+const char WiFiAPPSK[] = "d1spl4y4.0";  //CONTRASEÑA
+const char ssid[] = "Display Industria 4.0"; // NOMBRE DE LA RED
 uint8_t pin_led = 2;
 
 char webpage[] PROGMEM = R"=====(
@@ -131,7 +131,7 @@ char webpage[] PROGMEM = R"=====(
 void setupWiFi()
 {
   WiFi.mode(WIFI_AP);
-  WiFi.softAP(ssid, NULL);
+  WiFi.softAP(ssid, WiFiAPPSK);
   Serial.print("\n IP Address: ");
   Serial.println(WiFi.softAPIP());
 }
