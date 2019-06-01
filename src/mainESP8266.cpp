@@ -153,7 +153,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             IPAddress ip = webSocket.remoteIP(num);
             Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
             // send message to client
-            webSocket.sendTXT(num, "Setup Iniciado");
+            webSocket.sendTXT(num, "Setup Iniciado\n");
         }
       break;
     }
@@ -185,7 +185,7 @@ void setup()
   // Add service to MDNS
   MDNS.addService("http", "tcp", 80);
   MDNS.addService("ws", "tcp", 81);
-  webSocket.broadcastTXT("\nDisplay Seguridad Industria 4.0");
+  webSocket.broadcastTXT("Display Seguridad Industria 4.0\n");
 }
 
 //----------------------------------------------------------- loop
@@ -193,5 +193,9 @@ void loop()
 {
   webSocket.loop();
   server.handleClient();
-
+  if(Serial.available() > 0)
+  {
+    char c[] = {(char)Serial.read()};
+    webSocket.broadcastTXT(c, sizeof(c));
+  }
 }
