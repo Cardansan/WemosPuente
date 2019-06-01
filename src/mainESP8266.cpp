@@ -10,7 +10,6 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 
 const char WiFiAPPSK[] = "d1spl4y4.0";  //CONTRASEÑA
 const char ssid[] = "Display Industria 4.0"; // NOMBRE DE LA RED
-uint8_t pin_led = 2;
 
 char webpage[] PROGMEM = R"=====(
 <html>
