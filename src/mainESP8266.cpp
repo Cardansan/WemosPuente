@@ -9,8 +9,8 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 
 
 const char WiFiAPPSK[] = "d1spl4y4.0";  //CONTRASEÑA
-const char ssid[] = "Display Industria 4.0"; // NOMBRE DE LA RED
-
+const char ssid[] = "Display_de_Seguridad"; // NOMBRE DE LA RED
+//Socket.send('Connect ' + new Date());
 char webpage[] PROGMEM = R"=====(
 <html>
 <head>
@@ -22,7 +22,7 @@ char webpage[] PROGMEM = R"=====(
       Socket = new WebSocket('ws://' + window.location.hostname + ':81/',['arduino']);
       Socket.onopen = function ()
       {
-        Socket.send('Connect ' + new Date());
+
       }
       Socket.onmessage = function(event)
       {
@@ -53,7 +53,7 @@ char webpage[] PROGMEM = R"=====(
     function sendTextNum2()
     {
       Socket.send("/"+document.getElementById("txNum2").value);
-      document.getElementById("txNum1").value = "";
+      document.getElementById("txNum2").value = "";
     }
     function sendTextCol2()
     {
@@ -145,13 +145,13 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
       break;
 
       case WStype_DISCONNECTED:
-            Serial.printf("[%u] Disconnected\n", num);
+            //Serial.printf("[%u] Disconnected\n", num);
       break;
 
 
      case WStype_CONNECTED: {
             IPAddress ip = webSocket.remoteIP(num);
-            Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
+            //Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
             // send message to client
             webSocket.sendTXT(num, "Setup Iniciado\n");
         }
