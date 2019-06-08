@@ -131,7 +131,7 @@ void setupWiFi()
 {
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, WiFiAPPSK);
-  Serial.print("\n IP Address: ");
+  Serial.print("\n &IP Address: ");
   Serial.println(WiFi.softAPIP());
 }
 //-------------------------------------------------------------webSocketEvent
@@ -163,12 +163,12 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
 void setup()
 {
   Serial.begin(115200);
-  Serial.print("\nSetting up... ");
+  //Serial.print("\nSetting up... ");
   setupWiFi();
   delay(1000);//wait for a second
   if(MDNS.begin("esp8266"))
   {
-    Serial.println("\nMDNS responder started");
+    //Serial.println("\nMDNS responder started");
   }
 
   // handle index
